@@ -3,7 +3,7 @@ name: Build and Push API & Web
 on:
   push:
     branches:
-      # - "main"
+      - "main"
       - "deploy/dev"
   release:
     types: [published]
@@ -28,6 +28,13 @@ jobs:
             image_name_env: "DIFY_API_IMAGE_NAME"
             context: "api"
     steps:
+      - name: Prepare Custom UI
+        run: |
+            pwd
+            ls -l 
+            cd ./web/
+            bash -x ./custom.sh
+            
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
