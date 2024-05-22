@@ -28,16 +28,15 @@ jobs:
             image_name_env: "DIFY_API_IMAGE_NAME"
             context: "api"
     steps:
-      - name: Prepare Custom UI
-        run: |
-            pwd
-            ls -l 
-            cd ./web/
-            bash -x ./custom.sh
-            
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
+ 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -58,6 +57,12 @@ jobs:
             type=sha,enable=true,priority=100,prefix=,suffix=,format=long
             type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/tags/') }}
 
+      - name: Prepare Custom UI
+        run: |
+            pwd
+            ls -l 
+            cd ./web/
+            bash -x ./custom.sh
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
