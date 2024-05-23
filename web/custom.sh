@@ -23,4 +23,5 @@ $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/header/accoun
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/base/chat/chat-with-history/config-panel/index.tsx
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/share/chat/welcome/index.tsx
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/share/chatbot/welcome/index.tsx
-$xsed "s#https://github.com/langgenius/dify/#https://https://github.com/blockmap/llmai/#g" ../web/app/components/header/account-about/index.tsx
+$xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/signin/normalForm.tsx
+$xsed "s#https://github.com/langgenius/dify/#https://github.com/blockmap/llmai/#g" ../web/app/components/header/account-about/index.tsx
