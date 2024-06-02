@@ -1,4 +1,4 @@
-name: Build and Push API & Web
+name: Custom Build and Push API & Web
 
 on:
   push:
