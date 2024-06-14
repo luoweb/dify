@@ -27,4 +27,4 @@ $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/signin/normalForm.tsx
 $xsed "s#https://github.com/langgenius/dify/#https://github.com/blockmap/llmai/#g" ../web/app/components/header/account-about/index.tsx
 
 # custom api:
-$xsed "s#Dify OpenAPI#BlockAI OpenAPI#g" ../api/controllers/service_api/index.py
+# $xsed "s#Dify OpenAPI#BlockAI OpenAPI#g" ../api/controllers/service_api/index.py
