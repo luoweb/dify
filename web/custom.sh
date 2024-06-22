@@ -11,7 +11,7 @@ else
 fi
 
 # custom with config
-$xsed "s#'CAN_REPLACE_LOGO': 'False'#'CAN_REPLACE_LOGO': 'True'#g" ../api/config.py
+# $xsed "s#'CAN_REPLACE_LOGO': 'False'#'CAN_REPLACE_LOGO': 'True'#g" ../api/config.py
 
 # custom webui
 $xsed "s#Dify#LLM AI#g" ../web/i18n/zh-Hans/login.ts
