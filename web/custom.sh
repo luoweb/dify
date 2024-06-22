@@ -26,7 +26,7 @@ $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/share/chat/we
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/share/chatbot/welcome/index.tsx
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/signin/normalForm.tsx
 $xsed "s#https://github.com/langgenius/dify/#https://github.com/blockmap/llmai/#g" ../web/app/components/header/account-about/index.tsx
-find ../web/ -name "*.tsx" | xargs grep "\- Dify" | awk -F':' '{print $1} | $xsed "s#- Dify#- LLM#g" 
-'
+find ../web/ -name "*.tsx" | xargs grep "\- Dify" | awk -F':' '{print $1} | $xsed "s#- Dify#- LLM#g"'
+
 # custom api:
 # $xsed "s#Dify OpenAPI#BlockAI OpenAPI#g" ../api/controllers/service_api/index.py
