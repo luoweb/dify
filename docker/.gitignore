@@ -1,1 +1,2 @@
 volumes*
+nginx/conf.d/default.conf
