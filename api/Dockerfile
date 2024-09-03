@@ -70,7 +70,7 @@ RUN python -c "import nltk; nltk.download('punkt'); nltk.download('averaged_perc
 # Copy source code
 COPY . /app/api/
 
-RUN sh ./custom.sh
+RUN sh -x ./custom.sh
 # Copy entrypoint
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
