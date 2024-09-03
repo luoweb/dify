@@ -15,7 +15,6 @@ fi
 
 # custom webui
 # find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "${xsed} -i.bak 's#Dify#LLMAI#g' @"
-find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "sed -i.bak 's#Dify#LLMAI#g' @"
 $xsed "s#Dify#LLM AI#g" ../web/i18n/zh-Hans/login.ts
 $xsed "s#Dify#LLM AI#g" ../web/app/layout.tsx
 $xsed "s#POWERED BY#技术支持:#g" ../web/app/components/custom/custom-web-app-brand/index.tsx
@@ -28,8 +27,10 @@ $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/share/chat/we
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/share/chatbot/welcome/index.tsx
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/signin/normalForm.tsx
 $xsed "s#https://github.com/langgenius/dify/#https://github.com/blockmap/llmai/#g" ../web/app/components/header/account-about/index.tsx
-find ../web -name "*.tsx" | xargs grep "\- Dify"
-find ../web -name "*.tsx" | xargs grep "\- Dify" | awk -F':' '{print $1}' | xargs $xsed "s#- Dify#- LLM#g"
+# find ../web -name "*.tsx" | xargs grep "\- Dify"
+# find ../web -name "*.tsx" | xargs grep "\- Dify" | awk -F':' '{print $1}' | xargs $xsed "s#- Dify#- LLM#g"
+find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"
+find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "sed -i.bak 's#Dify#LLMAI#g' @"
 
 # custom api:
 # $xsed "s#Dify OpenAPI#BlockAI OpenAPI#g" ../api/controllers/service_api/index.py
