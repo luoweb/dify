@@ -32,7 +32,7 @@ $xsed "s#https://github.com/langgenius/dify#https://github.com/blockmap/llmai#g"
 # find ../web -name "*.tsx" | xargs grep "\- Dify"
 # find ../web -name "*.tsx" | xargs grep "\- Dify" | awk -F':' '{print $1}' | xargs $xsed "s#- Dify#- LLM#g"
 find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"$]"
-find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"$]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "sed -i.bak 's#Dify#LLMAI#g' '@'"
+find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"$]"| awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#Dify#LLMAI#g' '@'"
 
 # custom api:
 # $xsed "s#Dify OpenAPI#BlockAI OpenAPI#g" ../api/controllers/service_api/index.py
