@@ -28,3 +28,5 @@ $xsed "s#https://dify.ai/#https://llm.ai/#g" ${EXEC_HOME}/web/app/components/sha
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ${EXEC_HOME}/web/app/components/share/chatbot/welcome/index.tsx
 $xsed "s#https://dify.ai/#https://llm.ai/#g" ${EXEC_HOME}/web/app/signin/normalForm.tsx
 $xsed "s#https://github.com/langgenius/dify/#https://github.com/blockmap/llmai/#g" ${EXEC_HOME}/web/app/components/header/account-about/index.tsx
+find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"
+find ${EXEC_HOME} -type f -name "*.ts" -o -name "*.tsx" -o -name "*.py"| xargs grep -E "[ '\"]Dify[ '\"]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "sed -i.bak 's#Dify#LLMAI#g' @"

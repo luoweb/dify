@@ -14,6 +14,8 @@ fi
 # $xsed "s#'CAN_REPLACE_LOGO': 'False'#'CAN_REPLACE_LOGO': 'True'#g" ../api/config.py
 
 # custom webui
+# find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "${xsed} -i.bak 's#Dify#LLMAI#g' @"
+find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "sed -i.bak 's#Dify#LLMAI#g' @"
 $xsed "s#Dify#LLM AI#g" ../web/i18n/zh-Hans/login.ts
 $xsed "s#Dify#LLM AI#g" ../web/app/layout.tsx
 $xsed "s#POWERED BY#技术支持:#g" ../web/app/components/custom/custom-web-app-brand/index.tsx
