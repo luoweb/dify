@@ -31,8 +31,8 @@ $xsed "s#https://dify.ai#https://llm.ai#g" ../web/app/signin/normalForm.tsx
 $xsed "s#https://github.com/langgenius/dify#https://github.com/blockmap/llmai#g" ../web/app/components/header/account-about/index.tsx
 # find ../web -name "*.tsx" | xargs grep "\- Dify"
 # find ../web -name "*.tsx" | xargs grep "\- Dify" | awk -F':' '{print $1}' | xargs $xsed "s#- Dify#- LLM#g"
-find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "{ default as Dify }"
-find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "{ default as Dify }" | awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#Dify#LLMAI#g' '@'"
+find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "default as Dify "
+find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "default as Dify " | awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#Dify#LLMAI#g' '@'"
 find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "https://github.com/langgenius/dify" | grep -vE "{ default as Dify }" | awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#https://github.com/langgenius/dify#https://github.com/blockmap/llmai#g' '@'"
 
 # custom api:
