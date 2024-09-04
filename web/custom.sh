@@ -19,7 +19,7 @@ $xsed "s#Dify#LLM AI#g" ../web/i18n/zh-Hans/login.ts
 $xsed "s#Dify#LLM AI#g" ../web/app/layout.tsx
 $xsed "s#Dify#LLM AI#g" "../web/app/(commonLayout)/layout.tsx"
 $xsed "s#Dify#LLM AI#g" "../web/app/(commonLayout)/datasets/page.tsx"
-$xsed "s#Dify#LLMAI#g"  ../web/app/components/base/icons/src/public/common/Dify.tsx
+$xsed "s#'Dify'#'LLMAI'#g"  ../web/app/components/base/icons/src/public/common/Dify.tsx
 $xsed "s#POWERED BY#技术支持:#g" ../web/app/components/custom/custom-web-app-brand/index.tsx
 $xsed "s#logo-site.png#logo-site-jsb.png#g" ../web/app/components/base/logo/logo-site.tsx
 $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g" ../web/app/components/header/account-about/index.tsx
