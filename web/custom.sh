@@ -19,6 +19,7 @@ $xsed "s#Dify#LLM AI#g" ../web/i18n/zh-Hans/login.ts
 $xsed "s#Dify#LLM AI#g" ../web/app/layout.tsx
 $xsed "s#Dify#LLM AI#g" "../web/app/(commonLayout)/layout.tsx"
 $xsed "s#Dify#LLM AI#g" "../web/app/(commonLayout)/datasets/page.tsx"
+$xsed "s#Dify#LLMAI#g"  ../web/app/components/base/icons/src/public/common/Dify.tsx
 $xsed "s#POWERED BY#技术支持:#g" ../web/app/components/custom/custom-web-app-brand/index.tsx
 $xsed "s#logo-site.png#logo-site-jsb.png#g" ../web/app/components/base/logo/logo-site.tsx
 $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g" ../web/app/components/header/account-about/index.tsx
@@ -31,9 +32,9 @@ $xsed "s#https://dify.ai#https://llm.ai#g" ../web/app/signin/normalForm.tsx
 $xsed "s#https://github.com/langgenius/dify#https://github.com/blockmap/llmai#g" ../web/app/components/header/account-about/index.tsx
 # find ../web -name "*.tsx" | xargs grep "\- Dify"
 # find ../web -name "*.tsx" | xargs grep "\- Dify" | awk -F':' '{print $1}' | xargs $xsed "s#- Dify#- LLM#g"
-find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "default as Dify "
-find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "default as Dify " | awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#Dify#LLMAI#g' '@'"
-find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "https://github.com/langgenius/dify" | grep -vE "{ default as Dify }" | awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#https://github.com/langgenius/dify#https://github.com/blockmap/llmai#g' '@'"
+find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "default as Dify |Dify.json"
+find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '>\"]Dify[ '<\"\$\`]" | grep -vE "default as Dify |Dify.json" | awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#Dify#LLMAI#g' '@'"
+find ../web -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "https://github.com/langgenius/dify" | grep -vE " default as Dify | Dify.json" | awk -F ':' '{print $1}' | xargs -I@ sh -c "sed -i.bak 's#https://github.com/langgenius/dify#https://github.com/blockmap/llmai#g' '@'"
 
 # custom api:
 # $xsed "s#Dify OpenAPI#BlockAI OpenAPI#g" ../api/controllers/service_api/index.py
