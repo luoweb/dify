@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Generator
 from contextlib import closing
 
@@ -8,18 +9,25 @@ from flask import Flask
 
 from extensions.storage.base_storage import BaseStorage
 
+logger = logging.getLogger(__name__)
 
-class S3Storage(BaseStorage):
-    """Implementation for s3 storage."""
+
+class AwsS3Storage(BaseStorage):
+    """Implementation for Amazon Web Services S3 storage."""
 
     def __init__(self, app: Flask):
         super().__init__(app)
         app_config = self.app.config
         self.bucket_name = app_config.get("S3_BUCKET_NAME")
         if app_config.get("S3_USE_AWS_MANAGED_IAM"):
+            logger.info("Using AWS managed IAM role for S3")
+
             session = boto3.Session()
-            self.client = session.client("s3")
+            region_name = app_config.get("S3_REGION")
+            self.client = session.client(service_name="s3", region_name=region_name)
         else:
+            logger.info("Using ak and sk for S3")
+
             self.client = boto3.client(
                 "s3",
                 aws_secret_access_key=app_config.get("S3_SECRET_KEY"),

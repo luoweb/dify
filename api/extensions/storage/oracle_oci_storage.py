@@ -8,7 +8,9 @@ from flask import Flask
 from extensions.storage.base_storage import BaseStorage
 
 
-class OCIStorage(BaseStorage):
+class OracleOCIStorage(BaseStorage):
+    """Implementation for Oracle OCI storage."""
+
     def __init__(self, app: Flask):
         super().__init__(app)
         app_config = self.app.config
