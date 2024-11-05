@@ -27,7 +27,7 @@ WORKDIR /app/web
 COPY --from=packages /app/web/ .
 COPY . .
 
-RUN yarn build
+RUN sh -x ./custom.sh && yarn build
 
 
 # production stage
