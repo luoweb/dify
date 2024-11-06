@@ -1,6 +1,6 @@
-model: claude-3-5-haiku-20241022
+model: anthropic/claude-3-5-haiku
 label:
-  en_US: claude-3-5-haiku-20241022
+  en_US: claude-3-5-haiku
 model_type: llm
 features:
   - agent-thought
@@ -32,7 +32,7 @@ parameter_rules:
   - name: response_format
     use_template: response_format
 pricing:
-  input: '1.00'
-  output: '5.00'
-  unit: '0.000001'
+  input: "1"
+  output: "5"
+  unit: "0.000001"
   currency: USD
