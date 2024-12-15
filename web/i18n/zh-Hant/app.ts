@@ -39,7 +39,7 @@ const translation = {
     advanced: '工作流編排',
     advancedFor: '進階使用者適用',
     advancedDescription: '工作流編排以工作流的形式編排聊天機器人，提供高度的自定義，包括編輯內建提示的能力。 它適合有經驗的使用者。',
-    captionName: '圖示 & 名稱',
+    captionName: '應用名稱 & 圖示',
     appNamePlaceholder: '給你的應用起個名字',
     captionDescription: '描述',
     appDescriptionPlaceholder: '輸入應用的描述',
@@ -140,6 +140,11 @@ const translation = {
   importFromDSL: '從 DSL 導入',
   importFromDSLFile: '從 DSL 檔',
   importFromDSLUrlPlaceholder: '在此處粘貼 DSL 連結',
+  mermaid: {
+    handDrawn: '手繪',
+    classic: '經典',
+  },
+  openInExplore: '在“探索”中打開',
 }
 
 export default translation
