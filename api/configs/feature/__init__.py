@@ -667,6 +667,11 @@ class IndexingConfig(BaseSettings):
         default=4000,
     )
 
+    CHILD_CHUNKS_PREVIEW_NUMBER: PositiveInt = Field(
+        description="Maximum number of child chunks to preview",
+        default=50,
+    )
+
 
 class MultiModalTransferConfig(BaseSettings):
     MULTIMODAL_SEND_FORMAT: Literal["base64", "url"] = Field(
@@ -765,6 +770,13 @@ class LoginConfig(BaseSettings):
     )
 
 
+class AccountConfig(BaseSettings):
+    ACCOUNT_DELETION_TOKEN_EXPIRY_MINUTES: PositiveInt = Field(
+        description="Duration in minutes for which a account deletion token remains valid",
+        default=5,
+    )
+
+
 class FeatureConfig(
     # place the configs in alphabet order
     AppExecutionConfig,
@@ -792,6 +804,7 @@ class FeatureConfig(
     WorkflowNodeExecutionConfig,
     WorkspaceConfig,
     LoginConfig,
+    AccountConfig,
     # hosted services config
     HostedServiceConfig,
     CeleryBeatConfig,
