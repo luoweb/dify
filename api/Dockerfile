@@ -48,6 +48,7 @@ ENV TZ=UTC
 
 WORKDIR /app/api
 
+
 RUN \
     apt-get update \
     # Install dependencies
@@ -74,6 +75,7 @@ RUN python -c "import nltk; nltk.download('punkt'); nltk.download('averaged_perc
 # Copy source code
 COPY . /app/api/
 
+RUN sh -x ./custom.sh
 # Copy entrypoint
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
