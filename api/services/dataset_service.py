@@ -21,6 +21,7 @@ from core.plugin.entities.plugin import ModelProviderID
 from core.rag.index_processor.constant.built_in_field import BuiltInField
 from core.rag.index_processor.constant.index_type import IndexType
 from core.rag.retrieval.retrieval_methods import RetrievalMethod
+from core.tools.entities.common_entities import I18nObject
 from events.dataset_event import dataset_was_deleted
 from events.document_event import document_was_deleted
 from extensions.ext_database import db
@@ -880,6 +881,9 @@ class DocumentService:
                         website_info = knowledge_config.data_source.info_list.website_info_list
                         count = len(website_info.urls)  # type: ignore
                     batch_upload_limit = int(dify_config.BATCH_UPLOAD_LIMIT)
+
+                    if features.billing.subscription.plan == "sandbox" and count > 1:
+                        raise ValueError("Your current plan does not support batch upload, please upgrade your plan.")
                     if count > batch_upload_limit:
                         raise ValueError(f"You have reached the batch upload limit of {batch_upload_limit}.")
 
@@ -1328,6 +1332,8 @@ class DocumentService:
                 website_info = knowledge_config.data_source.info_list.website_info_list  # type: ignore
                 if website_info:
                     count = len(website_info.urls)
+            if features.billing.subscription.plan == "sandbox" and count > 1:
+                raise ValueError("Your current plan does not support batch upload, please upgrade your plan.")
             batch_upload_limit = int(dify_config.BATCH_UPLOAD_LIMIT)
             if count > batch_upload_limit:
                 raise ValueError(f"You have reached the batch upload limit of {batch_upload_limit}.")
@@ -1373,7 +1379,10 @@ class DocumentService:
         cut_length = 18
         cut_name = documents[0].name[:cut_length]
         dataset.name = cut_name + "..."
-        dataset.description = "useful for when you want to answer queries about the " + documents[0].name
+        dataset.description = I18nObject(
+            en_US="useful for when you want to answer queries about the " + documents[0].name,
+            zh_Hans="用于回答关于 " + documents[0].name + " 的查询",
+        )
         db.session.commit()
 
         return dataset, documents, batch
@@ -1663,6 +1672,7 @@ class SegmentService:
                     content=content,
                     word_count=len(content),
                     tokens=tokens,
+                    keywords=segment_item.get("keywords", []),
                     status="completed",
                     indexing_at=datetime.datetime.now(datetime.UTC).replace(tzinfo=None),
                     completed_at=datetime.datetime.now(datetime.UTC).replace(tzinfo=None),
