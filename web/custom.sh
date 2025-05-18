@@ -26,11 +26,11 @@ $xsed "s#POWERED BY#技术支持:#g" ../web/app/components/custom/custom-web-app
 $xsed "s#logo-site.png#logo-site-jsb.png#g" ../web/app/components/base/logo/logo-site.tsx
 $xsed "s#logo.svg#logo-llmapp.svg#g" ../web/app/components/base/logo/logo-site.tsx
 $xsed "s#logo-monochrome-white.svg#logo-monochrome-white-llmapp.svg#g" ../web/app/components/base/logo/logo-site.tsx
-find ../web -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" | xargs $xsed "s#logo.svg#logo-llmapp.svg#g"
-find ../web -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" | xargs $xsed "s#logo-monochrome-white.svg#logo-monochrome-white-llmapp.svg#g"
+find ../web -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" | grep -v node_modules | xargs $xsed "s#logo.svg#logo-llmapp.svg#g"
+find ../web -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" | grep -v node_modules | xargs $xsed "s#logo-monochrome-white.svg#logo-monochrome-white-llmapp.svg#g"
 $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g" ../web/app/components/header/account-about/index.tsx
 $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g" ../web/app/signin/page.tsx
-find ../web -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" | xargs $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g"
+find ../web -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" | grep -v node_modules | xargs $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g"
 $xsed "s#https://dify.ai#https://llm.ai#g" ../web/app/components/header/account-about/index.tsx
 $xsed "s#https://dify.ai#https://llm.ai#g" ../web/app/components/base/chat/chat-with-history/config-panel/index.tsx
 # $xsed "s#https://dify.ai/#https://llm.ai/#g" ../web/app/components/share/chat/welcome/index.tsx
