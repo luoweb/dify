@@ -22,7 +22,7 @@ from libs import helper
 from .account import Account
 from .base import Base
 from .engine import db
-from .enums import CreatedByRole
+from .enums import CreatorUserRole
 from .types import StringUUID
 
 if TYPE_CHECKING:
@@ -429,15 +429,15 @@ class WorkflowRun(Base):
 
     @property
     def created_by_account(self):
-        created_by_role = CreatedByRole(self.created_by_role)
-        return db.session.get(Account, self.created_by) if created_by_role == CreatedByRole.ACCOUNT else None
+        created_by_role = CreatorUserRole(self.created_by_role)
+        return db.session.get(Account, self.created_by) if created_by_role == CreatorUserRole.ACCOUNT else None
 
     @property
     def created_by_end_user(self):
         from models.model import EndUser
 
-        created_by_role = CreatedByRole(self.created_by_role)
-        return db.session.get(EndUser, self.created_by) if created_by_role == CreatedByRole.END_USER else None
+        created_by_role = CreatorUserRole(self.created_by_role)
+        return db.session.get(EndUser, self.created_by) if created_by_role == CreatorUserRole.END_USER else None
 
     @property
     def graph_dict(self):
@@ -634,17 +634,17 @@ class WorkflowNodeExecution(Base):
 
     @property
     def created_by_account(self):
-        created_by_role = CreatedByRole(self.created_by_role)
+        created_by_role = CreatorUserRole(self.created_by_role)
         # TODO(-LAN-): Avoid using db.session.get() here.
-        return db.session.get(Account, self.created_by) if created_by_role == CreatedByRole.ACCOUNT else None
+        return db.session.get(Account, self.created_by) if created_by_role == CreatorUserRole.ACCOUNT else None
 
     @property
     def created_by_end_user(self):
         from models.model import EndUser
 
-        created_by_role = CreatedByRole(self.created_by_role)
+        created_by_role = CreatorUserRole(self.created_by_role)
         # TODO(-LAN-): Avoid using db.session.get() here.
-        return db.session.get(EndUser, self.created_by) if created_by_role == CreatedByRole.END_USER else None
+        return db.session.get(EndUser, self.created_by) if created_by_role == CreatorUserRole.END_USER else None
 
     @property
     def inputs_dict(self):
@@ -755,22 +755,22 @@ class WorkflowAppLog(Base):
 
     @property
     def created_by_account(self):
-        created_by_role = CreatedByRole(self.created_by_role)
-        return db.session.get(Account, self.created_by) if created_by_role == CreatedByRole.ACCOUNT else None
+        created_by_role = CreatorUserRole(self.created_by_role)
+        return db.session.get(Account, self.created_by) if created_by_role == CreatorUserRole.ACCOUNT else None
 
     @property
     def created_by_end_user(self):
         from models.model import EndUser
 
-        created_by_role = CreatedByRole(self.created_by_role)
-        return db.session.get(EndUser, self.created_by) if created_by_role == CreatedByRole.END_USER else None
+        created_by_role = CreatorUserRole(self.created_by_role)
+        return db.session.get(EndUser, self.created_by) if created_by_role == CreatorUserRole.END_USER else None
 
 
 class ConversationVariable(Base):
     __tablename__ = "workflow_conversation_variables"
 
     id: Mapped[str] = mapped_column(StringUUID, primary_key=True)
-    conversation_id: Mapped[str] = mapped_column(StringUUID, nullable=False, primary_key=True)
+    conversation_id: Mapped[str] = mapped_column(StringUUID, nullable=False, primary_key=True, index=True)
     app_id: Mapped[str] = mapped_column(StringUUID, nullable=False, index=True)
     data = mapped_column(db.Text, nullable=False)
     created_at = mapped_column(db.DateTime, nullable=False, server_default=func.current_timestamp(), index=True)

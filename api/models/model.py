@@ -29,7 +29,7 @@ from libs.helper import generate_string
 from .account import Account, Tenant
 from .base import Base
 from .engine import db
-from .enums import CreatedByRole
+from .enums import CreatorUserRole
 from .types import StringUUID
 from .workflow import WorkflowRunStatus
 
@@ -1237,6 +1237,21 @@ class MessageFeedback(Base):
         account = db.session.query(Account).filter(Account.id == self.from_account_id).first()
         return account
 
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "app_id": str(self.app_id),
+            "conversation_id": str(self.conversation_id),
+            "message_id": str(self.message_id),
+            "rating": self.rating,
+            "content": self.content,
+            "from_source": self.from_source,
+            "from_end_user_id": str(self.from_end_user_id) if self.from_end_user_id else None,
+            "from_account_id": str(self.from_account_id) if self.from_account_id else None,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
+        }
+
 
 class MessageFile(Base):
     __tablename__ = "message_files"
@@ -1255,7 +1270,7 @@ class MessageFile(Base):
         url: str | None = None,
         belongs_to: Literal["user", "assistant"] | None = None,
         upload_file_id: str | None = None,
-        created_by_role: CreatedByRole,
+        created_by_role: CreatorUserRole,
         created_by: str,
     ):
         self.message_id = message_id
@@ -1402,7 +1417,7 @@ class EndUser(Base, UserMixin):
     )
 
     id = db.Column(StringUUID, server_default=db.text("uuid_generate_v4()"))
-    tenant_id = db.Column(StringUUID, nullable=False)
+    tenant_id: Mapped[str] = db.Column(StringUUID, nullable=False)
     app_id = db.Column(StringUUID, nullable=True)
     type = db.Column(db.String(255), nullable=False)
     external_user_id = db.Column(db.String(255), nullable=True)
@@ -1532,7 +1547,7 @@ class UploadFile(Base):
         size: int,
         extension: str,
         mime_type: str,
-        created_by_role: CreatedByRole,
+        created_by_role: CreatorUserRole,
         created_by: str,
         created_at: datetime,
         used: bool,
