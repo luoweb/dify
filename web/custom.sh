@@ -24,6 +24,8 @@ $xsed "s#Powered by Dify#Powered by LLMAI#g"  ../web/app/components/base/chat/em
 $xsed "s#POWERED BY#技术支持:#g" ../web/app/components/custom/custom-web-app-brand/index.tsx
 
 $xsed "s#logo-site.png#logo-site-jsb.png#g" ../web/app/components/base/logo/logo-site.tsx
+$xsed "s#logo.svg#logo-llmapp.svg#g" ../web/app/components/base/logo/logo-site.tsx
+$xsed "s#logo-monochrome-white.svg#logo-monochrome-white-llmapp.svg#g" ../web/app/components/base/logo/logo-site.tsx
 $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g" ../web/app/components/header/account-about/index.tsx
 $xsed "s#LangGenius, Inc.#BlockAI, Inc.#g" ../web/app/signin/page.tsx
 $xsed "s#https://dify.ai#https://llm.ai#g" ../web/app/components/header/account-about/index.tsx
