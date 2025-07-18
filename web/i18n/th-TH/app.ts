@@ -142,6 +142,14 @@ const translation = {
       notConfigured: 'ผู้ให้บริการกําหนดค่าเพื่อเปิดใช้งานการติดตาม',
       moreProvider: 'ผู้ให้บริการเพิ่มเติม',
     },
+    arize: {
+      title: 'Arize',
+      description: 'การสังเกตการณ์ LLM ระดับองค์กร การประเมินออนไลน์และออฟไลน์ การตรวจสอบ และการทดลอง—ขับเคลื่อนโดย OpenTelemetry ออกแบบมาโดยเฉพาะสำหรับแอปพลิเคชันที่ขับเคลื่อนด้วย LLM และตัวแทน',
+    },
+    phoenix: {
+      title: 'Phoenix',
+      description: 'แพลตฟอร์มโอเพ่นซอร์สและ OpenTelemetry สำหรับการสังเกตการณ์ การประเมิน วิศวกรรมพรอมต์ และการทดลองสำหรับเวิร์กโฟลว์และตัวแทน LLM ของคุณ',
+    },
     langsmith: {
       title: 'Langsmith',
       description: 'แพลตฟอร์มนักพัฒนาแบบครบวงจรสําหรับทุกขั้นตอนของ การพัฒนาโปรเจกต์ที่ขับเคลื่อนด้วย LLM',
@@ -168,6 +176,10 @@ const translation = {
     weave: {
       title: 'ทอ',
       description: 'Weave เป็นแพลตฟอร์มโอเพนซอร์สสำหรับการประเมินผล ทดสอบ และตรวจสอบแอปพลิเคชัน LLM',
+    },
+    aliyun: {
+      title: 'การตรวจสอบคลาวด์',
+      description: 'แพลตฟอร์มการสังเกตการณ์ที่จัดการโดย Alibaba Cloud ซึ่งไม่ต้องดูแลและบำรุงรักษา ช่วยให้สามารถติดตาม ตรวจสอบ และประเมินแอปพลิเคชัน Dify ได้ทันที',
     },
   },
   mermaid: {
@@ -243,6 +255,8 @@ const translation = {
   },
   accessControl: 'การควบคุมการเข้าถึงเว็บแอปพลิเคชัน',
   noAccessPermission: 'ไม่มีสิทธิ์เข้าถึงเว็บแอป',
+  maxActiveRequestsPlaceholder: 'ใส่ 0 สำหรับไม่จำกัด',
+  maxActiveRequests: 'จำนวนคำขอพร้อมกันสูงสุด',
 }
 
 export default translation

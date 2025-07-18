@@ -145,6 +145,14 @@ const translation = {
       notConfigured: 'トレース機能を有効化するためには、サービスの設定が必要です。',
       moreProvider: 'その他のプロバイダー',
     },
+    arize: {
+      title: 'Arize',
+      description: 'エンタープライズグレードのLLM可観測性、オンラインおよびオフライン評価、モニタリング、実験—OpenTelemetryによって支えられています。LLMおよびエージェント駆動型アプリケーション向けに特別に設計されています。',
+    },
+    phoenix: {
+      title: 'Phoenix',
+      description: 'オープンソースおよびOpenTelemetryベースの可観測性、評価、プロンプトエンジニアリング、実験プラットフォームで、LLMワークフローおよびエージェントに対応します。',
+    },
     langsmith: {
       title: 'LangSmith',
       description: 'LLM を利用したアプリケーションのライフサイクル全段階を支援する、オールインワンの開発者向けプラットフォームです。',
@@ -171,6 +179,10 @@ const translation = {
     weave: {
       title: '織る',
       description: 'Weave は、LLM アプリケーションを評価、テスト、および監視するためのオープンソースプラットフォームです。',
+    },
+    aliyun: {
+      title: 'クラウドモニター',
+      description: 'Alibaba Cloud が提供する完全管理型でメンテナンスフリーの可観測性プラットフォームは、Dify アプリケーションの即時監視、トレース、評価を可能にします。',
     },
   },
   answerIcon: {
@@ -246,6 +258,8 @@ const translation = {
     notSetDesc: '現在この Web アプリには誰もアクセスできません。権限を設定してください。',
   },
   noAccessPermission: 'Web アプリにアクセス権限がありません',
+  maxActiveRequestsPlaceholder: '無制限のために0を入力してください',
+  maxActiveRequests: '最大同時リクエスト数',
 }
 
 export default translation
