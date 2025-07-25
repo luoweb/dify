@@ -50,6 +50,7 @@ from .exc import (
     AgentInputTypeError,
     AgentInvocationError,
     AgentMessageTransformError,
+    AgentNodeError,
     AgentVariableNotFoundError,
     AgentVariableTypeError,
     ToolFileNotFoundError,
@@ -270,7 +271,14 @@ class AgentNode(BaseNode):
                         )
 
                         extra = tool.get("extra", {})
-                        runtime_variable_pool = variable_pool if self._node_data.version != "1" else None
+
+                        # This is an issue that caused problems before.
+                        # Logically, we shouldn't use the node_data.version field for judgment
+                        # But for backward compatibility with historical data
+                        # this version field judgment is still preserved here.
+                        runtime_variable_pool: VariablePool | None = None
+                        if node_data.version != "1" or node_data.tool_node_version != "1":
+                            runtime_variable_pool = variable_pool
                         tool_runtime = ToolManager.get_agent_tool_runtime(
                             self.tenant_id, self.app_id, entity, self.invoke_from, runtime_variable_pool
                         )
@@ -302,7 +310,7 @@ class AgentNode(BaseNode):
                             }
                         )
                     value = tool_value
-                if parameter.type == "model-selector":
+                if parameter.type == AgentStrategyParameter.AgentStrategyParameterType.MODEL_SELECTOR:
                     value = cast(dict[str, Any], value)
                     model_instance, model_schema = self._fetch_model(value)
                     # memory config
@@ -479,7 +487,7 @@ class AgentNode(BaseNode):
 
         text = ""
         files: list[File] = []
-        json: list[dict] = []
+        json_list: list[dict] = []
 
         agent_logs: list[AgentLogEvent] = []
         agent_execution_metadata: Mapping[WorkflowNodeExecutionMetadataKey, Any] = {}
@@ -557,7 +565,7 @@ class AgentNode(BaseNode):
                         if key in WorkflowNodeExecutionMetadataKey.__members__.values()
                     }
                 if message.message.json_object is not None:
-                    json.append(message.message.json_object)
+                    json_list.append(message.message.json_object)
             elif message.type == ToolInvokeMessage.MessageType.LINK:
                 assert isinstance(message.message, ToolInvokeMessage.TextMessage)
                 stream_text = f"Link: {message.message.text}\n"
@@ -586,7 +594,14 @@ class AgentNode(BaseNode):
                     variables[variable_name] = variable_value
             elif message.type == ToolInvokeMessage.MessageType.FILE:
                 assert message.meta is not None
-                assert isinstance(message.meta, File)
+                assert isinstance(message.meta, dict)
+                # Validate that meta contains a 'file' key
+                if "file" not in message.meta:
+                    raise AgentNodeError("File message is missing 'file' key in meta")
+
+                # Validate that the file is an instance of File
+                if not isinstance(message.meta["file"], File):
+                    raise AgentNodeError(f"Expected File object but got {type(message.meta['file']).__name__}")
                 files.append(message.meta["file"])
             elif message.type == ToolInvokeMessage.MessageType.LOG:
                 assert isinstance(message.message, ToolInvokeMessage.LogMessage)
@@ -669,8 +684,8 @@ class AgentNode(BaseNode):
                     }
                 )
         # Step 2: normalize JSON into {"data": [...]}.change json to list[dict]
-        if json:
-            json_output.extend(json)
+        if json_list:
+            json_output.extend(json_list)
         else:
             json_output.append({"data": []})
 

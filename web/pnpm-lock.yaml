@@ -66,8 +66,8 @@ importers:
         specifier: ^0.5.6
         version: 0.5.10
       '@headlessui/react':
-        specifier: ^2.2.0
-        version: 2.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 2.2.1
+        version: 2.2.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@heroicons/react':
         specifier: ^2.0.16
         version: 2.2.0(react@19.1.0)
@@ -516,6 +516,9 @@ importers:
       eslint-config-next:
         specifier: ~15.3.5
         version: 15.3.5(eslint@9.31.0(jiti@1.21.7))(typescript@5.8.3)
+      eslint-plugin-oxlint:
+        specifier: ^1.6.0
+        version: 1.6.0
       eslint-plugin-react-hooks:
         specifier: ^5.1.0
         version: 5.2.0(eslint@9.31.0(jiti@1.21.7))
@@ -1631,8 +1634,8 @@ packages:
     resolution: {integrity: sha512-HXuHKvpHLo9/GQ/yKMmKFyS1AYL2t9pL67+GfpYZfOAb29qD80EMozi50zRZk82KmNRBcA2A0/ErjpOwUxJrNg==}
     engines: {node: '>=20.0.0'}
 
-  '@headlessui/react@2.2.4':
-    resolution: {integrity: sha512-lz+OGcAH1dK93rgSMzXmm1qKOJkBUqZf1L4M8TWLNplftQD3IkoEDdUFNfAn4ylsN6WOTVtWaLmvmaHOUk1dTA==}
+  '@headlessui/react@2.2.1':
+    resolution: {integrity: sha512-daiUqVLae8CKVjEVT19P/izW0aGK0GNhMSAeMlrDebKmoVZHcRRwbxzgtnEadUVDXyBsWo9/UH4KHeniO+0tMg==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
@@ -4775,6 +4778,9 @@ packages:
     resolution: {integrity: sha512-brcKcxGnISN2CcVhXJ/kEQlNa0MEfGRtwKtWA16SkqXHKitaKIMrfemJKLKX1YqDU5C/5JY3PvZXd5jEW04e0Q==}
     engines: {node: '>=5.0.0'}
 
+  eslint-plugin-oxlint@1.6.0:
+    resolution: {integrity: sha512-DH5p3sCf0nIAPscl3yGnBWXXraV0bdl66hpLxvfnabvg/GzpgXf+pOCWpGK3qDb0+AIUkh1R/7A8GkOXtlj0oA==}
+
   eslint-plugin-perfectionist@4.15.0:
     resolution: {integrity: sha512-pC7PgoXyDnEXe14xvRUhBII8A3zRgggKqJFx2a82fjrItDs1BSI7zdZnQtM2yQvcyod6/ujmzb7ejKPx8lZTnw==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -5831,6 +5837,9 @@ packages:
   jsonc-eslint-parser@2.4.0:
     resolution: {integrity: sha512-WYDyuc/uFcGp6YtM2H0uKmUwieOuzeE/5YocFJLnLfclZ4inf3mRn8ZVy1s7Hxji7Jxm6Ss8gqpexD/GlKoGgg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+
+  jsonc-parser@3.3.1:
+    resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==}
 
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -9487,7 +9496,7 @@ snapshots:
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
-  '@headlessui/react@2.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@headlessui/react@2.2.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@floating-ui/react': 0.26.28(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@react-aria/focus': 3.20.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -9495,7 +9504,6 @@ snapshots:
       '@tanstack/react-virtual': 3.13.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
-      use-sync-external-store: 1.5.0(react@19.1.0)
 
   '@heroicons/react@2.2.0(react@19.1.0)':
     dependencies:
@@ -13169,6 +13177,10 @@ snapshots:
 
   eslint-plugin-no-only-tests@3.3.0: {}
 
+  eslint-plugin-oxlint@1.6.0:
+    dependencies:
+      jsonc-parser: 3.3.1
+
   eslint-plugin-perfectionist@4.15.0(eslint@9.31.0(jiti@1.21.7))(typescript@5.8.3):
     dependencies:
       '@typescript-eslint/types': 8.37.0
@@ -14649,6 +14661,8 @@ snapshots:
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
       semver: 7.7.2
+
+  jsonc-parser@3.3.1: {}
 
   jsonfile@6.1.0:
     dependencies:

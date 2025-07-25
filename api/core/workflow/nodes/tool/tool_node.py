@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from core.callback_handler.workflow_tool_callback_handler import DifyWorkflowCallbackHandler
 from core.file import File, FileTransferMethod
-from core.plugin.impl.exc import PluginDaemonClientSideError
+from core.plugin.impl.exc import PluginDaemonClientSideError, PluginInvokeError
 from core.plugin.impl.plugin import PluginInstaller
 from core.tools.entities.tool_entities import ToolInvokeMessage, ToolParameter
 from core.tools.errors import ToolInvokeError
@@ -70,7 +70,13 @@ class ToolNode(BaseNode):
         try:
             from core.tools.tool_manager import ToolManager
 
-            variable_pool = self.graph_runtime_state.variable_pool if self._node_data.version != "1" else None
+            # This is an issue that caused problems before.
+            # Logically, we shouldn't use the node_data.version field for judgment
+            # But for backward compatibility with historical data
+            # this version field judgment is still preserved here.
+            variable_pool: VariablePool | None = None
+            if node_data.version != "1" or node_data.tool_node_version != "1":
+                variable_pool = self.graph_runtime_state.variable_pool
             tool_runtime = ToolManager.get_workflow_tool_runtime(
                 self.tenant_id, self.app_id, self.node_id, self._node_data, self.invoke_from, variable_pool
             )
@@ -135,13 +141,36 @@ class ToolNode(BaseNode):
                 tenant_id=self.tenant_id,
                 node_id=self.node_id,
             )
-        except (PluginDaemonClientSideError, ToolInvokeError) as e:
+        except ToolInvokeError as e:
             yield RunCompletedEvent(
                 run_result=NodeRunResult(
                     status=WorkflowNodeExecutionStatus.FAILED,
                     inputs=parameters_for_log,
                     metadata={WorkflowNodeExecutionMetadataKey.TOOL_INFO: tool_info},
-                    error=f"Failed to transform tool message: {str(e)}",
+                    error=f"Failed to invoke tool {node_data.provider_name}: {str(e)}",
+                    error_type=type(e).__name__,
+                )
+            )
+        except PluginInvokeError as e:
+            yield RunCompletedEvent(
+                run_result=NodeRunResult(
+                    status=WorkflowNodeExecutionStatus.FAILED,
+                    inputs=parameters_for_log,
+                    metadata={WorkflowNodeExecutionMetadataKey.TOOL_INFO: tool_info},
+                    error="An error occurred in the plugin, "
+                    f"please contact the author of {node_data.provider_name} for help, "
+                    f"error type: {e.get_error_type()}, "
+                    f"error details: {e.get_error_message()}",
+                    error_type=type(e).__name__,
+                )
+            )
+        except PluginDaemonClientSideError as e:
+            yield RunCompletedEvent(
+                run_result=NodeRunResult(
+                    status=WorkflowNodeExecutionStatus.FAILED,
+                    inputs=parameters_for_log,
+                    metadata={WorkflowNodeExecutionMetadataKey.TOOL_INFO: tool_info},
+                    error=f"Failed to invoke tool, error: {e.description}",
                     error_type=type(e).__name__,
                 )
             )
@@ -310,7 +339,14 @@ class ToolNode(BaseNode):
                     variables[variable_name] = variable_value
             elif message.type == ToolInvokeMessage.MessageType.FILE:
                 assert message.meta is not None
-                assert isinstance(message.meta, File)
+                assert isinstance(message.meta, dict)
+                # Validate that meta contains a 'file' key
+                if "file" not in message.meta:
+                    raise ToolNodeError("File message is missing 'file' key in meta")
+
+                # Validate that the file is an instance of File
+                if not isinstance(message.meta["file"], File):
+                    raise ToolNodeError(f"Expected File object but got {type(message.meta['file']).__name__}")
                 files.append(message.meta["file"])
             elif message.type == ToolInvokeMessage.MessageType.LOG:
                 assert isinstance(message.message, ToolInvokeMessage.LogMessage)
