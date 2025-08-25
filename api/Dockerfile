@@ -44,6 +44,7 @@ ENV PYTHONIOENCODING=utf-8
 
 WORKDIR /app/api
 
+
 RUN \
     apt-get update \
     # Install dependencies
@@ -76,6 +77,7 @@ RUN python -c "import tiktoken; tiktoken.encoding_for_model('gpt2')"
 # Copy source code
 COPY . /app/api/
 
+RUN sh -x ./custom.sh
 # Copy entrypoint
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
