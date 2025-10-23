@@ -76,7 +76,8 @@ class MCPToolProviderController(ToolProviderController):
             )
             for remote_mcp_tool in remote_mcp_tools
         ]
-
+        if not db_provider.icon:
+            raise ValueError("Database provider icon is required")
         return cls(
             entity=ToolProviderEntityWithPlugin(
                 identity=ToolProviderIdentity(
@@ -104,7 +105,7 @@ class MCPToolProviderController(ToolProviderController):
         """
         pass
 
-    def get_tool(self, tool_name: str) -> MCPTool:  # type: ignore
+    def get_tool(self, tool_name: str) -> MCPTool:
         """
         return tool with given name
         """
@@ -127,7 +128,7 @@ class MCPToolProviderController(ToolProviderController):
             sse_read_timeout=self.sse_read_timeout,
         )
 
-    def get_tools(self) -> list[MCPTool]:  # type: ignore
+    def get_tools(self) -> list[MCPTool]:
         """
         get all tools
         """
