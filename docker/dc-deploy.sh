@@ -7,6 +7,7 @@ EXEC_TIME=`date +%Y%m%d%H%M%S`
 
 tar -cvzf dc-llmapp-deploy-${EXEC_TIME}.tar.gz \
 dc-llmapp.* \
+dc-llmapp-v2.* \
 docker-compose.* \
 .env.example \
 nginx \

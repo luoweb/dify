@@ -15,6 +15,8 @@ fi
 
 # custom webui
 # find ../web/ -type f -name "*.ts" -o -name "*.tsx" | xargs grep -E "[ '\"]Dify[ '\"]"| awk -F ':' '{print $1}' | xargs -I@ bash -c "${xsed} -i.bak 's#Dify#LLMAI#g' @"
+$xsed "s#Dify#LLMAI#g" ../web/public/_offline.html
+$xsed "s#Dify#LLMAI#g" ../web/public/manifest.json
 $xsed "s#Dify#LLM AI#g" ../web/i18n/zh-Hans/login.ts
 $xsed "s#Dify#LLM AI#g" ../web/app/layout.tsx
 $xsed "s#Dify#LLM AI#g" "../web/app/(commonLayout)/layout.tsx"
