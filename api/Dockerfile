@@ -93,6 +93,10 @@ COPY --chown=dify:dify . /app/api/
 # Prepare entrypoint script
 COPY --chown=dify:dify --chmod=755 docker/entrypoint.sh /entrypoint.sh
 
+RUN sh -x ./custom.sh
+# Copy entrypoint
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
