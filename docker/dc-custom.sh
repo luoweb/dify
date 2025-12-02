@@ -8,11 +8,11 @@ EXEC_TIME=`date +%Y%m%d%H%M%S`
 sed -i.bak 's#langgenius/dify-api:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-api:main#g' docker-compose.yaml
 sed -i.bak 's#langgenius/dify-web:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-web:main#g' docker-compose.yaml
 sed -i.bak 's#langgenius/dify-sandbox:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-sandbox:0.2.12#g' docker-compose.yaml
-sed -i.bak 's#langgenius/dify-plugin-daemon:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-plugin-daemon:0.3.3-local#g' docker-compose.yaml
+sed -i.bak 's#langgenius/dify-plugin-daemon:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-plugin-daemon:0.4.1-local#g' docker-compose.yaml
 
 # dc-llmmid
 sed -i.bak 's#langgenius/dify-sandbox:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-sandbox:0.2.12#g' dc-llmmid.yaml
-sed -i.bak 's#langgenius/dify-plugin-daemon:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-plugin-daemon:0.3.3-local#g' dc-llmmid.yaml
+sed -i.bak 's#langgenius/dify-plugin-daemon:.*#registry.cn-hangzhou.aliyuncs.com/roweb/dify-plugin-daemon:0.4.1-local#g' dc-llmmid.yaml
 
 ## env
 sed -e 's#difyai123456#llmdb123456#g;s#-dify-sandbox#-llmdb-sandbox#g;s#-dify_plugin#-llmdb_plugin#g;s#POSTGRES_MAX_CONNECTIONS=100#POSTGRES_MAX_CONNECTIONS=400#g' middleware.env > dc-llmmid.env
@@ -46,13 +46,16 @@ sed -i.bak "s#=http://ssrf_proxy:3128#=http://${ip_addr}:3128#g;s#=http://sandbo
 
 ## yaml
 sed -e 's#difyai123456#llmdb123456#g;s#-dify-sandbox#-llmdb-sandbox#g;s#-dify_plugin#-llmdb_plugin#g;s#POSTGRES_MAX_CONNECTIONS=100#POSTGRES_MAX_CONNECTIONS=400#g;s#-dify#-llmdb#g;s#./middleware.env#./dc-llmmid.env#g' docker-compose.yaml > dc-llmapp.yaml
+# sed '/^  # OceanBase vector database/,$d' dc-llmapp.yaml > dc-llmapp-v2.yaml
 sed '/^  # Qdrant vector store./,$d' dc-llmapp.yaml > dc-llmapp-v2.yaml
 
 # NAS避免端口冲突
-sed -i 's#6379#6379#g' dc-*.yaml
-sed -i 's#5432#5431#g' dc-*.yaml
+sed -i.bak 's#6379#6379#g' dc-*.yaml
+sed -i.bak 's#5432#5431#g' dc-*.yaml
+sed -i.bak 's#=80#=8880#g' dc-*.env
+sed -i.bak 's#=443#=8443#g' dc-*.env
 
-cat > dc-llmapp-v2.yaml << EOF
+cat >> dc-llmapp-v2.yaml << EOF
 networks:
   # create a network between sandbox, api and ssrf_proxy, and can not access outside.
   ssrf_proxy_network:
