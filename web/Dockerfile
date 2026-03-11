@@ -36,7 +36,8 @@ COPY . .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-RUN sh -x ./custom.sh && pnpm build:docker
+RUN sh -x ./custom.sh && pnpm build
+
 
 
 # production stage
