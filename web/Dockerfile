@@ -35,7 +35,9 @@ COPY --from=packages /app/web/ .
 COPY . .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN pnpm build
+
+RUN sh -x ./custom.sh && pnpm build
+
 
 
 # production stage
