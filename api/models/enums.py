@@ -11,6 +11,13 @@ class CreatorUserRole(StrEnum):
     ACCOUNT = "account"
     END_USER = "end_user"
 
+    @classmethod
+    def _missing_(cls, value):
+        if value == "end-user":
+            return cls.END_USER
+        else:
+            return super()._missing_(value)
+
 
 class WorkflowRunTriggeredFrom(StrEnum):
     DEBUGGING = "debugging"
@@ -215,6 +222,8 @@ class SegmentStatus(StrEnum):
     INDEXING = "indexing"
     COMPLETED = "completed"
     ERROR = "error"
+    PAUSED = "paused"
+    RE_SEGMENT = "re_segment"
 
 
 class DatasetRuntimeMode(StrEnum):
@@ -282,6 +291,7 @@ class SummaryStatus(StrEnum):
     GENERATING = "generating"
     COMPLETED = "completed"
     ERROR = "error"
+    TIMEOUT = "timeout"
 
 
 class MessageChainType(StrEnum):
