@@ -42,7 +42,9 @@ COPY . .
 
 WORKDIR /app/web
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN pnpm build && pnpm build:vinext
+
+RUN sh -x ./custom.sh && pnpm build && pnpm build:vinext
+
 
 
 # production stage
