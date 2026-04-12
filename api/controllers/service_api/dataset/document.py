@@ -31,6 +31,7 @@ from controllers.service_api.wraps import (
     cloud_edition_billing_resource_check,
 )
 from core.errors.error import ProviderTokenNotInitError
+from core.rag.entities import PreProcessingRule, Rule, Segmentation
 from core.rag.retrieval.retrieval_methods import RetrievalMethod
 from extensions.ext_database import db
 from fields.document_fields import document_fields, document_status_fields
@@ -40,11 +41,8 @@ from models.enums import SegmentStatus
 from services.dataset_service import DatasetService, DocumentService
 from services.entities.knowledge_entities.knowledge_entities import (
     KnowledgeConfig,
-    PreProcessingRule,
     ProcessRule,
     RetrievalModel,
-    Rule,
-    Segmentation,
 )
 from services.file_service import FileService
 from services.summary_index_service import SummaryIndexService
@@ -529,7 +527,7 @@ class DocumentListApi(DatasetApiResource):
         if not dataset:
             raise NotFound("Dataset not found.")
 
-        query = select(Document).filter_by(dataset_id=str(dataset_id), tenant_id=tenant_id)
+        query = select(Document).where(Document.dataset_id == dataset_id, Document.tenant_id == tenant_id)
 
         if query_params.status:
             query = DocumentService.apply_display_status_filter(query, query_params.status)

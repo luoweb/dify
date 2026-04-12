@@ -19,6 +19,7 @@ from sqlalchemy import DateTime, String, func, select
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
 from configs import dify_config
+from core.rag.entities import ParentMode, Rule
 from core.rag.index_processor.constant.built_in_field import BuiltInField, MetadataDataSource
 from core.rag.index_processor.constant.index_type import IndexStructureType, IndexTechniqueType
 from core.rag.index_processor.constant.query_type import QueryType
@@ -26,7 +27,6 @@ from core.rag.retrieval.retrieval_methods import RetrievalMethod
 from core.tools.signature import sign_upload_file
 from extensions.ext_storage import storage
 from libs.uuid_utils import uuidv7
-from services.entities.knowledge_entities.knowledge_entities import ParentMode, Rule
 
 from .account import Account
 from .base import Base, TypeBase
@@ -106,6 +106,56 @@ class ExternalKnowledgeApiDict(TypedDict):
     dataset_bindings: list[DatasetBindingItem]
     created_by: str
     created_at: str
+
+
+class DocumentDict(TypedDict):
+    id: str
+    tenant_id: str
+    dataset_id: str
+    position: int
+    data_source_type: str
+    data_source_info: str | None
+    dataset_process_rule_id: str | None
+    batch: str
+    name: str
+    created_from: str
+    created_by: str
+    created_api_request_id: str | None
+    created_at: datetime
+    processing_started_at: datetime | None
+    file_id: str | None
+    word_count: int | None
+    parsing_completed_at: datetime | None
+    cleaning_completed_at: datetime | None
+    splitting_completed_at: datetime | None
+    tokens: int | None
+    indexing_latency: float | None
+    completed_at: datetime | None
+    is_paused: bool | None
+    paused_by: str | None
+    paused_at: datetime | None
+    error: str | None
+    stopped_at: datetime | None
+    indexing_status: str
+    enabled: bool
+    disabled_at: datetime | None
+    disabled_by: str | None
+    archived: bool
+    archived_reason: str | None
+    archived_by: str | None
+    archived_at: datetime | None
+    updated_at: datetime
+    doc_type: str | None
+    doc_metadata: Any
+    doc_form: IndexStructureType
+    doc_language: str | None
+    display_status: str | None
+    data_source_info_dict: dict[str, Any]
+    average_segment_length: int
+    dataset_process_rule: ProcessRuleDict | None
+    dataset: None
+    segment_count: int | None
+    hit_count: int | None
 
 
 class DatasetPermissionEnum(enum.StrEnum):
@@ -675,8 +725,8 @@ class Document(Base):
         )
         return built_in_fields
 
-    def to_dict(self) -> dict[str, Any]:
-        return {
+    def to_dict(self) -> DocumentDict:
+        result: DocumentDict = {
             "id": self.id,
             "tenant_id": self.tenant_id,
             "dataset_id": self.dataset_id,
@@ -721,10 +771,11 @@ class Document(Base):
             "data_source_info_dict": self.data_source_info_dict,
             "average_segment_length": self.average_segment_length,
             "dataset_process_rule": self.dataset_process_rule.to_dict() if self.dataset_process_rule else None,
-            "dataset": None,  # Dataset class doesn't have a to_dict method
+            "dataset": None,
             "segment_count": self.segment_count,
             "hit_count": self.hit_count,
         }
+        return result
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]):
