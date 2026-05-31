@@ -425,7 +425,7 @@ class AppAnnotationService:
         return {"deleted_count": deleted_count}
 
     @classmethod
-    def batch_import_app_annotations(cls, app_id, file: FileStorage):
+    def batch_import_app_annotations(cls, app_id: str, file: FileStorage):
         """
         Batch import annotations from CSV file with enhanced security checks.
 
@@ -521,7 +521,7 @@ class AppAnnotationService:
                 )
 
             # Check annotation quota limit
-            features = FeatureService.get_features(current_tenant_id)
+            features = FeatureService.get_features(current_tenant_id, exclude_vector_space=True)
             if features.billing.enabled:
                 annotation_quota_limit = features.annotation_quota_limit
                 if annotation_quota_limit.limit < len(result) + annotation_quota_limit.size:

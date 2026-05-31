@@ -9,7 +9,7 @@ import type { ReactElement, ReactNode } from 'react'
  */
 import type { AppListResponse } from '@/models/app'
 import type { App } from '@/types/app'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createSystemFeaturesWrapper } from '@/__tests__/utils/mock-system-features'
 import List from '@/app/components/apps/list'
@@ -45,6 +45,7 @@ vi.mock('@/next/navigation', () => ({
     push: mockRouterPush,
     replace: mockRouterReplace,
   }),
+  usePathname: () => '/apps',
   useSearchParams: () => new URLSearchParams(),
 }))
 
@@ -92,6 +93,9 @@ vi.mock('@tanstack/react-query', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@tanstack/react-query')>()
   return {
     ...actual,
+    useQuery: () => ({
+      data: [],
+    }),
     useInfiniteQuery: () => ({
       data: { pages: mockPages },
       isLoading: mockIsLoading,
@@ -360,13 +364,18 @@ describe('App List Browsing Flow', () => {
       expect(input).toBeInTheDocument()
     })
 
-    it('should allow typing in search input', () => {
+    it('should update search query when typing in search input', async () => {
       mockPages = [createPage([createMockApp()])]
-      renderList()
+      const { onUrlUpdate } = renderList()
 
-      const input = document.querySelector('input')!
+      const input = screen.getByPlaceholderText('common.operation.search')
       fireEvent.change(input, { target: { value: 'test search' } })
-      expect(input.value).toBe('test search')
+
+      await waitFor(() => {
+        expect(onUrlUpdate).toHaveBeenCalled()
+      })
+      const lastCall = onUrlUpdate.mock.calls[onUrlUpdate.mock.calls.length - 1]![0]
+      expect(lastCall.searchParams.get('keywords')).toBe('test search')
     })
   })
 

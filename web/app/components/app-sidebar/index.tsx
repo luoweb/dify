@@ -1,6 +1,8 @@
+import type { AppInfoActions } from './app-info/use-app-info-actions'
 import type { NavIcon } from './nav-link'
 import { cn } from '@langgenius/dify-ui/cn'
-import { useHover, useKeyPress } from 'ahooks'
+import { useHotkey } from '@tanstack/react-hotkeys'
+import { useHover } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
@@ -9,22 +11,12 @@ import { useEventEmitterContextContext } from '@/context/event-emitter'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import { usePathname } from '@/next/navigation'
 import Divider from '../base/divider'
-import { getKeyboardKeyCodeBySystem } from '../workflow/utils'
-import AppInfo from './app-info'
+import AppInfo, { AppInfoView } from './app-info'
 import AppSidebarDropdown from './app-sidebar-dropdown'
 import DatasetInfo from './dataset-info'
 import DatasetSidebarDropdown from './dataset-sidebar-dropdown'
 import NavLink from './nav-link'
 import ToggleButton from './toggle-button'
-
-const isShortcutFromInputArea = (target: EventTarget | null) => {
-  if (!(target instanceof HTMLElement))
-    return false
-
-  return target.tagName === 'INPUT'
-    || target.tagName === 'TEXTAREA'
-    || target.isContentEditable
-}
 
 type IAppDetailNavProps = {
   iconType?: 'app' | 'dataset'
@@ -36,12 +28,14 @@ type IAppDetailNavProps = {
     disabled?: boolean
   }>
   extraInfo?: (modeState: string) => React.ReactNode
+  appInfoActions?: AppInfoActions
 }
 
 const AppDetailNav = ({
   navigation,
   extraInfo,
   iconType = 'app',
+  appInfoActions,
 }: IAppDetailNavProps) => {
   const { appSidebarExpand, setAppSidebarExpand } = useAppStore(useShallow(state => ({
     appSidebarExpand: state.appSidebarExpand,
@@ -78,18 +72,20 @@ const AppDetailNav = ({
     }
   }, [appSidebarExpand, setAppSidebarExpand])
 
-  useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.b`, (e) => {
-    if (isShortcutFromInputArea(e.target))
-      return
-
+  useHotkey('Mod+B', (e) => {
     e.preventDefault()
     handleToggle()
-  }, { exactMatch: true, useCapture: true })
+  }, {
+    ignoreInputs: true,
+  })
 
   if (inWorkflowCanvas && hideHeader) {
     return (
       <div className="flex w-0 shrink-0">
-        <AppSidebarDropdown navigation={navigation} />
+        <AppSidebarDropdown
+          navigation={navigation}
+          appInfoActions={appInfoActions}
+        />
       </div>
     )
   }
@@ -117,7 +113,15 @@ const AppDetailNav = ({
         )}
       >
         {iconType === 'app' && (
-          <AppInfo expand={expand} />
+          appInfoActions
+            ? (
+                <AppInfoView
+                  expand={expand}
+                  actions={appInfoActions}
+                  renderDetail={false}
+                />
+              )
+            : <AppInfo expand={expand} />
         )}
         {iconType !== 'app' && (
           <DatasetInfo expand={expand} />

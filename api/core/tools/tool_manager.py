@@ -264,9 +264,9 @@ class ToolManager:
                     if builtin_provider is None:
                         raise ToolProviderNotFoundError(f"builtin provider {provider_id} not found")
 
-                from core.helper.credential_utils import check_credential_policy_compliance
+                from core.helper.credential_utils import runtime_check_credential_policy_compliance
 
-                check_credential_policy_compliance(
+                runtime_check_credential_policy_compliance(
                     credential_id=builtin_provider.id,
                     provider=provider_id,
                     credential_type=PluginCredentialType.TOOL,
@@ -863,7 +863,7 @@ class ToolManager:
         return controller
 
     @classmethod
-    def user_get_api_provider(cls, provider: str, tenant_id: str):
+    def user_get_api_provider(cls, provider: str, tenant_id: str, mask: bool = True):
         """
         get api provider
         """
@@ -902,8 +902,10 @@ class ToolManager:
             tenant_id=tenant_id,
             controller=controller,
         )
-
-        masked_credentials = encrypter.mask_plugin_credentials(encrypter.decrypt(credentials))
+        if mask:
+            masked_credentials = encrypter.mask_plugin_credentials(encrypter.decrypt(credentials))
+        else:
+            masked_credentials = encrypter.decrypt(credentials)
 
         try:
             icon = emoji_icon_adapter.validate_json(provider_obj.icon)
