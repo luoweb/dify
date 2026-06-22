@@ -4,7 +4,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('@/config', () => ({
   API_PREFIX: 'http://localhost:5001/console/api',
+  CSRF_COOKIE_NAME: () => 'csrf_token',
+  CSRF_HEADER_NAME: 'X-CSRF-Token',
 }))
+
+vi.mock('server-only', () => ({}))
 
 vi.mock('@/config/server', () => ({
   SERVER_CONSOLE_API_PREFIX: undefined,
@@ -99,7 +103,20 @@ describe('auth refresh route', () => {
     ))
 
     expect(response.status).toBe(303)
-    expect(response.headers.get('location')).toBe('/signin?redirect_url=%2Fapps')
+    expect(response.headers.get('location')).toBe('/signin?redirect_url=%2F')
+  })
+
+  it('should default missing redirect targets to the home path', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 401 })))
+    const { GET } = await import('../route')
+
+    const response = await GET(createRequest(
+      'http://localhost:3000/auth/refresh',
+      'refresh_token=expired',
+    ))
+
+    expect(response.status).toBe(303)
+    expect(response.headers.get('location')).toBe('/signin?redirect_url=%2F')
   })
 
   it('should not leak internal request origin when redirecting to signin', async () => {
